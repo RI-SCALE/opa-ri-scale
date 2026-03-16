@@ -1,5 +1,6 @@
 policies:
 - type: Set
+  uid: 1234
   permission:
   - action: read
     target: https://data.deps.eu/dataset/abc123

@@ -1,5 +1,5 @@
-issuers:
-- https://iam-dev.cloud.cnaf.infn.it/
-groups:
-- /admin
-- urn:geant:cnafsd:group:admin
+tokens:
+- issuer: https://iam-dev.cloud.cnaf.infn.it/
+- issuer: https://iam-riscale.cloud.cnaf.infn.it/
+  groups:
+  - urn:geant:ri-scale:group:opa-write

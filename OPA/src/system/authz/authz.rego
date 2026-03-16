@@ -2,8 +2,7 @@ package system.authz
 
 import rego.v1
 
-import data.system.authz.issuers as issuers
-import data.system.authz.groups as groups
+import data.system.authz.tokens as tokens
 
 default allow := {
 	"allowed": false,
@@ -11,21 +10,24 @@ default allow := {
 }
 
 allow := {"allowed": true} if {
-	_payload(input.identity).iss in issuers
+    some token in tokens
+	_payload(input.identity).iss == token.issuer
 	input.method in _query_methods
 }
 
 allow := {"allowed": true} if {
-	_payload(input.identity).iss in issuers
+    some token in tokens
+	_payload(input.identity).iss == token.issuer
 	some group in _payload(input.identity)["wlcg.groups"]
-	group in groups
+	group in token.groups
 	input.method in _update_methods
 }
 
 allow := {"allowed": true} if {
-	_payload(input.identity).iss in issuers
+    some token in tokens
+	_payload(input.identity).iss == token.issuer
 	some group in _payload(input.identity).entitlements
-	group in groups
+	group in token.groups
 	input.method in _update_methods
 }
 
@@ -33,4 +35,3 @@ allow := {"allowed": false, "reason": reason} if {
 	not input.identity
 	reason := "Missing bearer token"
 }
-
