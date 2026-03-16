@@ -13,7 +13,7 @@ We can use the [docker-compose](./docker-compose.yml) file to test the integrati
 - `opa-local`:  runs the policies locally and a live reload is also applied (useful for development). Within the docker network it is reachable at http://opa-local.test.example:8181
 - `client`: client container used to test the OPA integration.
 
-To connect to the bundle hosted on the GitHub private registry please add your GitHub Personal Access Token with at least `read:packages`, `read:project` and `repo` scopes in the [.env](./.env) file.
+To connect to the bundle hosted on the GitHub private registry please add your GitHub Personal Access Token with at least `read:packages` and `read:project` scopes in the [.env](./.env) file.
 
 For the next tests, run the services and enter in the `client` container:
 
@@ -121,7 +121,7 @@ services:
         token: "<username>:<password>"
 ```
 
-or _Bearer_ authentication, after creating your GitHub Personal Access Token (PAT) with at least `read:packages`, `read:project` and `repo` scopes:
+or _Bearer_ authentication, after creating your GitHub Personal Access Token (PAT) with at least `read:packages` and `read:project` scopes:
 
 ```yml
 services:
@@ -315,7 +315,7 @@ Install Ansible with
 dnf install ansible -y
 ```
 
-Clone this repo and add the required Personal Access Token to download the OPA bundle
+Clone this repo and add the required Personal Access Token (with at least the `read:packages` and `read:project` scopes) to download the OPA bundle
 from GitHub
 
 ```bash
