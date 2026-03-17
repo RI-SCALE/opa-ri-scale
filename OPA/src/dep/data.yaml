@@ -1,6 +1,5 @@
 policies:
 - type: Set
-  uid: 1234
   permission:
   - action: read
     target: https://data.deps.eu/dataset/abc123
@@ -10,6 +9,7 @@ policies:
       operator: eq
       rightOperand: https://refeds.org/profile/mfa
 - type: Set
+  uid: 1234
   permission:
   - action: modify
     target: https://data.ri.eu/dataset/abc123
