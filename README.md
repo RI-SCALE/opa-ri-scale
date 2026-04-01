@@ -2,7 +2,7 @@
 
 This repo holds the [Open Policy Agent](https://www.openpolicyagent.org/) authorization rules which are applied in the context of the RI-SCALE project.
 
-Any commit to the `OPA/src` directory will trigger a GitHub workflow which downloads the static policies in ODRL format from the API (https://odrl-repo.dep.dev.rciam.grnet.gr/policies (*)) and builds a bundle of policies and rego files for OPA. Moreover, the same job runs every 12 hours in order to keep the policies updated. The bundle is published on the GitHub registry (`ghcr.io/federicaagostini/opa-dep:latest`), so that RI communities can deploy an OPA service which reads the remote bundle and optionally adds further policies. Access to the bundle is limited to people in the same organization, so you will require a  Personal Access Token or basic authentication with username/password.
+Any commit to the `OPA/src` directory will trigger a GitHub workflow which downloads the static policies in ODRL format from the API (https://odrl-repo.dep.dev.rciam.grnet.gr/policies (*)) and builds a bundle of policies and rego files for OPA. Moreover, the same job runs every 12 hours in order to keep the policies updated. The bundle is published on the GitHub registry (`ghcr.io/ri-scale/opa-dep:latest`), so that RI communities can deploy an OPA service which reads the remote bundle and optionally adds further policies. Access to the bundle is limited to people in the same organization, so you will require a  Personal Access Token or basic authentication with username/password.
 
 Also, here we setup a basic deployment with docker compose to test the workflow. A way to deploy OPA is shown in this README.
 
@@ -107,7 +107,7 @@ services:
 bundles:
   dep:
     service: gh
-    resource: ghcr.io/federicaagostini/opa-dep:latest
+    resource: ghcr.io/ri-scale/opa-dep:latest
 
 default_decision: dep
 ```
@@ -284,7 +284,7 @@ services:
 bundles:
   dep:
     service: gh
-    resource: ghcr.io/federicaagostini/opa-dep:latest
+    resource: ghcr.io/ri-scale/opa-dep:latest
     persist: true
     polling:
       min_delay_seconds: 100
@@ -321,7 +321,7 @@ Clone this repo and add the required Personal Access Token (with at least the `r
 from GitHub
 
 ```bash
-git clone https://github.com/federicaagostini/opa-ri-scale.git
+git clone https://github.com/RI-SCALE/opa-ri-scale.git
 echo "opa_pat: \"ghp_xxxx\"" > ansible/vars/secrets.yml
 ```
 

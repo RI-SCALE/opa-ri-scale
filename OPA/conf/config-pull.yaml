@@ -10,7 +10,7 @@ services:
 bundles:
   dep:
     service: gh
-    resource: ghcr.io/federicaagostini/opa-dep:latest
+    resource: ghcr.io/ri-scale/opa-dep:latest
     persist: true
     polling:
       min_delay_seconds: 10
