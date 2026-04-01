@@ -68,7 +68,7 @@ jobs:
 
       - name: Push bundle to GHCR
         run: |
-          IMAGE=ghcr.io/${{ github.repository_owner }}/opa-dep
+          IMAGE=ghcr.io/$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')/opa-dep
           MT_CONF=application/vnd.oci.image.config.v1+json
           MT_IMAGE=application/vnd.oci.image.layer.v1.tar+gzip
 
