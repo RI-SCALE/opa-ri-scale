@@ -1,4 +1,4 @@
-package system.authz
+package system.authz.utils
 
 import rego.v1
 

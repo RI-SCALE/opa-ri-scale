@@ -2,7 +2,10 @@ package system.authz
 
 import rego.v1
 
-import data.system.authz.tokens as tokens
+import data.system.authz.policy.tokens as tokens
+import data.system.authz.utils._query_methods
+import data.system.authz.utils._update_methods
+import data.system.authz.utils._payload
 
 default allow := {
 	"allowed": false,
