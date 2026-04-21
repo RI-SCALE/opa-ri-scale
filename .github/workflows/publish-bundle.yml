@@ -51,6 +51,21 @@ jobs:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
 
+      - name: Add data file for API authorization
+        run: |
+          cat <<EOF > OPA/src/system/authz/policy/data.yaml
+          tokens:
+          - issuer: https://iam-dev.cloud.cnaf.infn.it/
+          - issuer: https://iam-riscale.cloud.cnaf.infn.it/
+            groups:
+            - urn:geant:ri-scale:group:opa-write
+            client_id: ${IAM_INTROSPECT_CLIENT_ID}
+            client_secret: ${IAM_INTROSPECT_CLIENT_SECRET}
+          EOF
+        env:
+          IAM_INTROSPECT_CLIENT_SECRET: ${{ secrets.IAM_INTROSPECT_CLIENT_SECRET }}
+          IAM_INTROSPECT_CLIENT_ID: ${{ secrets.IAM_INTROSPECT_CLIENT_ID }}
+
       - name: Build OPA bundle
         run: |
           opa build OPA/src --output dep.tar.gz
