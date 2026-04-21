@@ -2,11 +2,11 @@ name: Publish OPA Bundle
 
 on:
   push:
-    paths:
-      - 'OPA/src/**'
+    #paths:
+    #  - 'OPA/src/**'
   pull_request:
-    paths:
-      - 'OPA/src/**'
+    #paths:
+    #  - 'OPA/src/**'
 
   schedule:
     - cron: '0 */12 * * *'
@@ -53,6 +53,9 @@ jobs:
 
       - name: Add data file for API authorization
         run: |
+          pwd
+          ls -R
+          mkdir -p OPA/src/system/authz/policy
           cat <<EOF > OPA/src/system/authz/policy/data.yaml
           tokens:
           - issuer: https://iam-dev.cloud.cnaf.infn.it/
