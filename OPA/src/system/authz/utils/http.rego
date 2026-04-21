@@ -24,3 +24,7 @@ _safe_http_get(url) := resp if {
     resp.status_code >= 200
     resp.status_code < 400
 }
+
+_sanitized_url(url) := sanitized_url if {
+    sanitized_url := trim_right(url, "/")
+}
