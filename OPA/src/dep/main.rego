@@ -16,6 +16,7 @@ allow if {
 allow if {
     not data.override.allow
     count(matched_policies) > 0
+    not data.dep.match.prohibited
 }
 
 allow_and_valid if {

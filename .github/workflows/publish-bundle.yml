@@ -68,9 +68,12 @@ jobs:
           IAM_INTROSPECT_CLIENT_SECRET: ${{ secrets.IAM_INTROSPECT_CLIENT_SECRET }}
           IAM_INTROSPECT_CLIENT_ID: ${{ secrets.IAM_INTROSPECT_CLIENT_ID }}
 
+      - name: Test OPA policies
+        run: opa test OPA/src/dep -v
+
       - name: Build OPA bundle
         run: |
-          opa build -b OPA/src --output dep.tar.gz
+          opa build -b OPA/src --ignore '*_test.rego' --output dep.tar.gz
 
       - name: Install ORAS
         run: |
