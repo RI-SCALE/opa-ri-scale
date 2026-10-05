@@ -15,4 +15,4 @@ constraint_is_matched(rule) if {
 }
 
 _holds(c) if { c.leftOperand == "acr"; c.operator == "eq"; acr_is_matched(c) }
-_holds(c) if { c.leftOperand == "entitlement"; c.operator == "eq"; entitlement_is_matched(c) }
+_holds(c) if { c.leftOperand in {"entitlement", "entitlements"}; c.operator == "eq"; entitlement_is_matched(c) }
