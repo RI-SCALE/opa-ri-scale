@@ -251,5 +251,26 @@ decision_logs:
 
 For other configuration parameters see the [OPA documentation](https://www.openpolicyagent.org/docs/configuration).
 
+### Synchronize ODRL policies on-demand
 
+A list of DEP policies are exposed following the [ODRL repository API](https://github.com/RI-SCALE/odrl-policy-repository-api), and synchronized in OPA twice a day via a [GitHub Workflow](https://github.com/RI-SCALE/opa-ri-scale/blob/main/.github/workflows/publish-bundle.yml#L50). But it is also possible to trigger the workflow manually from this repository:
+- select _Action_ (top) tab
+- select _Publish OPA Bundle_ (left) tab
+- select the green button with the label _Run workflow_
+- select which branch you want to run (default is _main_).
 
+The manual workflow will publish an updated bundle named
+- `ghcr.io/ri-scale/opa-dep:synch-latest` if you have choosen the _main_ branch,
+- `ghcr.io/ri-scale/opa-dep:<branch-name>` otherwise
+
+that is also updated twice a day by the GitHub workflow, even without manual intervention.
+
+In order to connect OPA to your synchronized bundle one should change the configuration e.g. with
+
+```yaml
+
+bundles:
+  dep:
+    service: gh
+    resource: ghcr.io/ri-scale/opa-dep:synch-latest
+```
