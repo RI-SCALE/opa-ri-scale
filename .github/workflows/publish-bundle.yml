@@ -32,6 +32,7 @@ jobs:
       - name: Set bundle version
         id: vars
         run: |
+          echo "GITHUB_EVENT_NAME=${GITHUB_EVENT_NAME}"
           BRANCH_NAME="${GITHUB_REF_NAME//\//-}"
 
           if [[ "${GITHUB_REF_TYPE}" = "tag" ]]; then
@@ -103,13 +104,20 @@ jobs:
 
           echo "{}" > manifest.config
 
-          if [[ "${GITHUB_EVENT_NAME}" != "workflow_dispatch" ]]; then
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            oras push ${IMAGE}:${SYNC_BUNDLE_TAG} --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
+          else
             if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
-               oras push ${IMAGE}:latest --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
+              oras push ${IMAGE}:latest --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
             fi
             oras push ${IMAGE}:${BUNDLE_TAG} --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
+            oras push ${IMAGE}:${SYNC_BUNDLE_TAG} --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
           fi
-          oras push ${IMAGE}:${SYNC_BUNDLE_TAG} --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
+
+          echo "GITHUB_EVENT_NAME=${GITHUB_EVENT_NAME}"
+          echo "GITHUB_REF_NAME=${GITHUB_REF_NAME}"
+          echo "BUNDLE_TAG=${BUNDLE_TAG}"
+          echo "SYNC_BUNDLE_TAG=${SYNC_BUNDLE_TAG}"
 
       - name: Bundle URL
         run: |
