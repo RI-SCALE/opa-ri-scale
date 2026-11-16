@@ -2,6 +2,8 @@ name: Publish OPA Bundle
 
 on:
   push:
+    paths:
+      - 'OPA/src/**'
   pull_request:
     paths:
       - 'OPA/src/**'
