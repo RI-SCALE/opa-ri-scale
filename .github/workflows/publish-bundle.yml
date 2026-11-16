@@ -34,16 +34,26 @@ jobs:
       - name: Set bundle version
         id: vars
         run: |
+          BRANCH_NAME="${GITHUB_REF_NAME//\//-}"
+
           if [[ "${GITHUB_REF_TYPE}" = "tag" ]]; then
             BUNDLE_TAG="${GITHUB_REF_NAME}"
+            SYNC_BUNDLE_TAG="synch-${BRANCH_NAME}"
+
           elif [[ "${GITHUB_REF_NAME}" == "main" ]]; then
             BUNDLE_TAG="${GITHUB_SHA::8}"
+            SYNC_BUNDLE_TAG="synch-latest"
+
           else
-            # Tag is equal to the branch name
-            BUNDLE_TAG="${GITHUB_REF_NAME//\//-}"
+            BUNDLE_TAG="${BRANCH_NAME}"
+            SYNC_BUNDLE_TAG="synch-${BRANCH_NAME}"
+
           fi
-          echo "Bundle tag: $BUNDLE_TAG"
+
+          echo "Bundle tag: ${BUNDLE_TAG}"
           echo "BUNDLE_TAG=${BUNDLE_TAG}" >> $GITHUB_ENV
+          echo "Bundle tag of synchroned policies (including manual builds): ${SYNC_BUNDLE_TAG}"
+          echo "SYNC_BUNDLE_TAG=${SYNC_BUNDLE_TAG}" >> $GITHUB_ENV
 
       - name: Download ODRL policies
         run: |
@@ -98,11 +108,17 @@ jobs:
 
           echo "{}" > manifest.config
 
-          if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
-            oras push ${IMAGE}:latest --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
+          if [[ "${GITHUB_EVENT_NAME}" != "workflow_dispatch" ]]; then
+            if [[ "${GITHUB_REF_NAME}" == "main" ]]; then
+               oras push ${IMAGE}:latest --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
+            fi
+            oras push ${IMAGE}:${BUNDLE_TAG} --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
           fi
-          oras push ${IMAGE}:${BUNDLE_TAG} --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
+          oras push ${IMAGE}:${SYNC_BUNDLE_TAG} --config manifest.config:${MT_CONF} dep.tar.gz:${MT_IMAGE}
 
       - name: Bundle URL
         run: |
-          echo "Bundle OCI URL: ghcr.io/${{ github.repository_owner }}/opa-dep:${BUNDLE_TAG}"
+          if [[ "${GITHUB_EVENT_NAME}" != "workflow_dispatch" ]]; then
+            echo "Common bundle OCI URL: ghcr.io/${{ github.repository_owner }}/opa-dep:${BUNDLE_TAG}"
+          fi
+          echo "Synchronized bundle OCI URL: ghcr.io/${{ github.repository_owner }}/opa-dep:${SYNC_BUNDLE_TAG}"
